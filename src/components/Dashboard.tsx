@@ -2450,7 +2450,7 @@ export function Dashboard() {
 
               {reviewData?.comments?.length ? (
                 <ReviewCommentsView
-                  summary={reviewData.summary}
+                  summary={reviewData.summary ?? ""}
                   verdict={reviewData.verdict ?? "comment"}
                   comments={reviewData.comments}
                   includeCommentHeading={includeCommentHeading}
