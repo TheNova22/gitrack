@@ -15,13 +15,15 @@ type FieldConfig = {
 };
 
 const FIELDS: FieldConfig[] = [
-    { key: "llm_provider", label: "LLM Provider", placeholder: "anthropic | groq | ollama | vertex | vllm", sensitive: false },
+    { key: "llm_provider", label: "LLM Provider", placeholder: "anthropic | groq | ollama | openai | vertex | vllm", sensitive: false },
     { key: "anthropic_api_key", label: "Anthropic API Key", placeholder: "sk-ant-...", sensitive: true, provider: "anthropic" },
     { key: "anthropic_model", label: "Anthropic Model", placeholder: "claude-3-5-sonnet-20241022", sensitive: false, provider: "anthropic" },
     { key: "groq_api_key", label: "Groq API Key", placeholder: "gsk_...", sensitive: true, provider: "groq" },
     { key: "groq_model", label: "Groq Model", placeholder: "llama3-70b-8192", sensitive: false, provider: "groq" },
     { key: "ollama_host", label: "Ollama Host", placeholder: "http://localhost:11434", sensitive: false, provider: "ollama" },
     { key: "ollama_model", label: "Ollama Model", placeholder: "llama3", sensitive: false, provider: "ollama" },
+    { key: "openai_api_key", label: "OpenAI API Key", placeholder: "sk-...", sensitive: true, provider: "openai" },
+    { key: "openai_model", label: "OpenAI Model", placeholder: "gpt-5.6-luna", sensitive: false, provider: "openai" },
     { key: "vertex_project_id", label: "Vertex Project ID", placeholder: "my-gcp-project", sensitive: false, provider: "vertex" },
     { key: "vertex_region", label: "Vertex Region", placeholder: "us-east5", sensitive: false, provider: "vertex" },
     { key: "vertex_model", label: "Vertex Model", placeholder: "claude-sonnet-4@20250514", sensitive: false, provider: "vertex" },
