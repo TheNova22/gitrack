@@ -8,6 +8,8 @@ export type UserSettings = {
     groq_model?: string;
     ollama_host?: string;
     ollama_model?: string;
+    openai_api_key?: string;
+    openai_model?: string;
     vertex_project_id?: string;
     vertex_region?: string;
     vertex_model?: string;

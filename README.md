@@ -27,12 +27,15 @@ https://github.com/user-attachments/assets/3610525f-c552-47ab-a0c9-b785b70a89ae
 | Provider | Configuration | Default model |
 |----------|--------------|---------------|
 | **Anthropic** | API key | `claude-3-5-sonnet-20241022` |
+| **OpenAI** | API key | `gpt-5.6-luna` |
 | **Vertex AI** | GCP project ID + Service Account key JSON | `claude-sonnet-4@20250514` |
 | **Groq** | API key | `llama3-70b-8192` |
 | **Ollama** | Host URL (local) | `llama3` |
 | **vLLM** | Host URL + optional API key | Auto-detected from server |
 
 All LLM credentials are configured per-user in the browser **Settings** page and stored in `localStorage`. They are transmitted to the server via a request header (`X-LLM-Settings`) per-request and **never persisted server-side**. No server-side secrets are required.
+
+OpenAI uses an OpenAI Platform API key with the Responses API. A ChatGPT or Codex subscription login is not used as an API key; configure an API key from the OpenAI Platform instead.
 
 ## Architecture — credential isolation
 

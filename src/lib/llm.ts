@@ -1,11 +1,12 @@
 import { callAnthropicMessages } from "@/lib/anthropic";
 import { callGroqChatCompletions } from "@/lib/groq";
 import { callOllamaChatCompletions } from "@/lib/ollama";
+import { callOpenAiResponses } from "@/lib/openai";
 import { callVertexAnthropicMessages } from "@/lib/vertex";
 import { callVllmChatCompletions } from "@/lib/vllm";
 import type { UserSettings } from "@/lib/settings-store";
 
-export type LlmProvider = "anthropic" | "groq" | "ollama" | "vertex" | "vllm";
+export type LlmProvider = "anthropic" | "groq" | "ollama" | "openai" | "vertex" | "vllm";
 
 /** Resolved credentials for a single LLM call — no process.env reads at runtime. */
 export type LlmConfig = {
@@ -14,6 +15,7 @@ export type LlmConfig = {
     anthropic_api_key?: string;
     groq_api_key?: string;
     ollama_host?: string;
+    openai_api_key?: string;
     vertex_project_id?: string;
     vertex_region?: string;
     vertex_sa_key?: string;
@@ -31,6 +33,7 @@ const PROVIDER_DEFAULTS: Record<LlmProvider, { settingsModel: keyof UserSettings
     anthropic: { settingsModel: "anthropic_model", defaultModel: "claude-3-5-sonnet-20241022" },
     groq: { settingsModel: "groq_model", defaultModel: "llama3-70b-8192" },
     ollama: { settingsModel: "ollama_model", defaultModel: "llama3" },
+    openai: { settingsModel: "openai_model", defaultModel: "gpt-5.6-luna" },
     vertex: { settingsModel: "vertex_model", defaultModel: "claude-sonnet-4@20250514" },
     vllm: { settingsModel: "vllm_model", defaultModel: "auto" },
 };
@@ -59,6 +62,7 @@ export function resolveLlmConfig(settings: UserSettings | null | undefined): Llm
         anthropic_api_key: settings.anthropic_api_key,
         groq_api_key: settings.groq_api_key,
         ollama_host: settings.ollama_host,
+        openai_api_key: settings.openai_api_key,
         vertex_project_id: settings.vertex_project_id,
         vertex_region: settings.vertex_region,
         vertex_sa_key: settings.vertex_sa_key,
@@ -72,6 +76,7 @@ function resolveProvider(settings: UserSettings): LlmProvider {
     if (forced === "groq") return "groq";
     if (forced === "anthropic") return "anthropic";
     if (forced === "ollama") return "ollama";
+    if (forced === "openai") return "openai";
     if (forced === "vertex") return "vertex";
     if (forced === "vllm") return "vllm";
 
@@ -80,6 +85,7 @@ function resolveProvider(settings: UserSettings): LlmProvider {
     if (settings.ollama_host) return "ollama";
     if (settings.vertex_project_id) return "vertex";
     if (settings.groq_api_key) return "groq";
+    if (settings.openai_api_key) return "openai";
     if (settings.anthropic_api_key) return "anthropic";
 
     throw new LlmNotConfiguredError();
@@ -92,6 +98,9 @@ function validateConfig(config: LlmConfig): void {
             break;
         case "groq":
             if (!config.groq_api_key) throw new LlmNotConfiguredError();
+            break;
+        case "openai":
+            if (!config.openai_api_key) throw new LlmNotConfiguredError();
             break;
         case "vertex":
             if (!config.vertex_project_id || !config.vertex_sa_key)
@@ -125,6 +134,9 @@ export async function callLlm(
             break;
         case "ollama":
             text = await callOllamaChatCompletions({ ...input, host: config.ollama_host! });
+            break;
+        case "openai":
+            text = await callOpenAiResponses({ ...input, apiKey: config.openai_api_key! });
             break;
         case "vertex":
             text = await callVertexAnthropicMessages({
